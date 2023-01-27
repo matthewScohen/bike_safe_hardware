@@ -6,4 +6,4 @@ The Adafruit Feather microcontroller and Bluefruit nRF52 bluetooth module are co
 The Raspberry Pi and SIM7600 system code are configured here. We use Python to allow the Raspberry PI to send AT commands to the GPS/SMS module.
 
 
-![image](https://user-images.githubusercontent.com/58480140/215144771-e6cbe3f0-a050-44ee-99b9-cc69cb856ac4.png)
+![image](https://user-images.githubusercontent.com/58480140/215144947-16626d43-3bed-4273-a488-0e91bdaa60d5.png)
