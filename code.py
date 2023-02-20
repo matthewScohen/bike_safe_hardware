@@ -1,5 +1,6 @@
 import board
 import microcontroller
+import time
 
 from adafruit_ble import BLERadio
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
@@ -8,6 +9,8 @@ from adafruit_ble.services.nordic import UARTService
 from adafruit_airlift.esp32 import ESP32
 
 from motor_control import setup_motor_pins, vibrate_motor
+
+BUZZ_DURATION = 1500
 
 motor1, motor2 = setup_motor_pins()
 esp32 = ESP32(  
@@ -41,10 +44,15 @@ while True:
                 strength = int(input_string[0:3])
                 print(f"Turn on left motor at strength: {strength}")
                 vibrate_motor(motor1, strength)
+                time.sleep(BUZZ_DURATION)
+                vibrate_motor(motor2, 0)
+                
             elif input_string[3:10] == "5551111":
                 strength = int(input_string[0:3])
                 print(f"Turn on right motor at strength: {strength}")
                 vibrate_motor(motor2, strength)
+                time.sleep(BUZZ_DURATION)
+                vibrate_motor(motor2, 0)
             else:
                 print(f"Saving phone number")
                 microcontroller.nvm[0:10] = input_byte_array
