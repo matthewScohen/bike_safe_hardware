@@ -45,7 +45,7 @@ imu.imu_setup(i2c)
 
 print(f"Saved phone number : {microcontroller.nvm[0:10]}") # https://docs.circuitpython.org/en/latest/shared-bindings/nvm/index.html
 while True:
-    lock_mode = False
+   # lock_mode = False
     ble.start_advertising(advertisement)
     print("waiting to connect")
     while not ble.connected:
@@ -64,14 +64,17 @@ while True:
                 strength = int(input_string[0:3])
                 print(f"Turn on right motor at strength: {strength}")
                 vibrate_motor(motor2, strength)
-            elif input_string[] == "55550001":
+            elif input_string[3:10] == "5550001":
                 lock_mode = True
                 print("Set lock mode")
                 alert = False
+            elif input_string[3:10] == "5551000":
+                lock_mode = False
+                print("End lock mode")
             else:
                 print(f"Saving phone number")
                 microcontroller.nvm[0:10] = input_byte_array
-    while lock_mode and not alert and not ble.connected:  #end lock mode when phone comes back in range
+    while lock_mode and not alert and not ble.connected:  #leave loop and check bluetooth inputs if phone comes back into range at any time
         #first reading
         a1 = imu.read_xyz(i2c)
         time.sleep(1)
@@ -80,6 +83,7 @@ while True:
         if imu.sig_move(a1,a2):
             print("1st MOVEMENT")
             time.sleep(120)  #wait 2 minutes (120seconds) and see if it's still being moved
+            #third reading
             a3 = imu.read_xyz(i2c)
             if imu.sig_move(a2,a3):
                 print("2nd MOVEMENT")
@@ -88,4 +92,3 @@ while True:
                 movement.value = False
                 alert = True #notify user of alert only once until new lock mode is initiated
         time.sleep(1)
-    #tell app lock mode is no longer set? (in case of mistakenly coming back in range)
