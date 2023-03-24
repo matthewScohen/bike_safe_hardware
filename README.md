@@ -8,4 +8,5 @@ The Raspberry Pi and SIM7600 system code are configured here. We use Python to a
 
 
 
-![image](https://user-images.githubusercontent.com/58480140/220010535-8bea5c6f-4dc9-498c-b3e5-606b1c61f240.png)
+![image](https://user-images.githubusercontent.com/58480140/227580137-ba8b6314-44e6-488d-ac7f-6507bbde0c08.png)
+
