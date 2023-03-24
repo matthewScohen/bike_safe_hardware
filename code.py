@@ -44,9 +44,9 @@ imu.imu_setup(i2c)
 
 
 print(f"Saved phone number : {microcontroller.nvm[0:10]}") # https://docs.circuitpython.org/en/latest/shared-bindings/nvm/index.html
+
+ble.start_advertising(advertisement)
 while True:
-   # lock_mode = False
-    ble.start_advertising(advertisement)
     print("waiting to connect")
     while not ble.connected:
         pass
@@ -74,6 +74,8 @@ while True:
             else:
                 print(f"Saving phone number")
                 microcontroller.nvm[0:10] = input_byte_array
+    #start new advertisement once phone is out of range to allow bluetooth to connect pack later           
+    ble.start_advertising(advertisement)
     while lock_mode and not alert and not ble.connected:  #leave loop and check bluetooth inputs if phone comes back into range at any time
         #first reading
         a1 = imu.read_xyz(i2c)
@@ -82,7 +84,7 @@ while True:
         a2 = imu.read_xyz(i2c)
         if imu.sig_move(a1,a2):
             print("1st MOVEMENT")
-            time.sleep(120)  #wait 2 minutes (120seconds) and see if it's still being moved
+            time.sleep(60)  #wait 1 minute (60 seconds) and see if it's still being moved
             #third reading
             a3 = imu.read_xyz(i2c)
             if imu.sig_move(a2,a3):
