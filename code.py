@@ -1,5 +1,11 @@
 import board
 import microcontroller
+import time
+import board
+import digitalio
+import busio
+import array as arr
+import imu as imu
 
 from adafruit_ble import BLERadio
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
@@ -23,10 +29,24 @@ ble = BLERadio(adapter)
 uart = UARTService()
 advertisement = ProvideServicesAdvertisement(uart)
 
+lock_mode = False
+alert = False
+
+#setup gpio pin to inform raspi
+movement = digitalio.DigitalInOut(board.D5)
+movement.direction = digitalio.Direction.OUTPUT
+movement.value = False
+
+# To use default I2C bus (most boards)
+i2c = busio.I2C(board.SCL, board.SDA)
+
+imu.imu_setup(i2c)
+
 
 print(f"Saved phone number : {microcontroller.nvm[0:10]}") # https://docs.circuitpython.org/en/latest/shared-bindings/nvm/index.html
+
+ble.start_advertising(advertisement)
 while True:
-    ble.start_advertising(advertisement)
     print("waiting to connect")
     while not ble.connected:
         pass
@@ -34,7 +54,6 @@ while True:
     while ble.connected:
         # Returns b'' if nothing was read.
         input_byte_array = uart.read(10)
-
         input_string = input_byte_array.decode() 
         if(len(input_string) == 10):
             if input_string[3:10] == "5550000":
@@ -45,6 +64,31 @@ while True:
                 strength = int(input_string[0:3])
                 print(f"Turn on right motor at strength: {strength}")
                 vibrate_motor(motor2, strength)
+            elif input_string[3:10] == "5550001":
+                lock_mode = True
+                print("Set lock mode")
+                alert = False
             else:
                 print(f"Saving phone number")
                 microcontroller.nvm[0:10] = input_byte_array
+    #start new advertisement once phone is out of range to allow bluetooth to connect pack later           
+    ble.start_advertising(advertisement)
+    while lock_mode and not alert and not ble.connected:  #leave loop and check bluetooth inputs if phone comes back into range at any time
+        #first reading
+        a1 = imu.read_xyz(i2c)
+        time.sleep(1)
+        #second reading
+        a2 = imu.read_xyz(i2c)
+        if imu.sig_move(a1,a2):
+            print("1st MOVEMENT")
+            time.sleep(60)  #wait 1 minute (60 seconds) and see if it's still being moved
+            #third reading
+            a3 = imu.read_xyz(i2c)
+            if imu.sig_move(a2,a3):
+                print("2nd MOVEMENT")
+                movement.value = True
+                time.sleep(1)  #one second gpio pulse
+                movement.value = False
+                alert = True #notify user of alert only once until new lock mode is initiated
+        time.sleep(1)
+    lock_mode = False
