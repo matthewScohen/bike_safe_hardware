@@ -68,9 +68,6 @@ while True:
                 lock_mode = True
                 print("Set lock mode")
                 alert = False
-            elif input_string[3:10] == "5551000":
-                lock_mode = False
-                print("End lock mode")
             else:
                 print(f"Saving phone number")
                 microcontroller.nvm[0:10] = input_byte_array
@@ -94,3 +91,4 @@ while True:
                 movement.value = False
                 alert = True #notify user of alert only once until new lock mode is initiated
         time.sleep(1)
+    lock_mode = False
