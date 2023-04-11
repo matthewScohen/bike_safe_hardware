@@ -1,6 +1,7 @@
 import board
 import microcontroller
 import time
+import board
 import digitalio
 import busio
 import array as arr
@@ -13,8 +14,6 @@ from adafruit_ble.services.nordic import UARTService
 from adafruit_airlift.esp32 import ESP32
 
 from motor_control import setup_motor_pins, vibrate_motor
-
-BUZZ_DURATION = 1.5
 
 motor1, motor2 = setup_motor_pins()
 esp32 = ESP32(  
@@ -61,17 +60,10 @@ while True:
                 strength = int(input_string[0:3])
                 print(f"Turn on left motor at strength: {strength}")
                 vibrate_motor(motor1, strength)
-                time.sleep(BUZZ_DURATION)
-                print(f"Turn off motor 1")
-                vibrate_motor(motor1, 0)
-                
             elif input_string[3:10] == "5551111":
                 strength = int(input_string[0:3])
                 print(f"Turn on right motor at strength: {strength}")
                 vibrate_motor(motor2, strength)
-                time.sleep(BUZZ_DURATION)
-                print(f"Turn off motor 2")
-                vibrate_motor(motor2, 0)
             elif input_string[3:10] == "5550001":
                 lock_mode = True
                 print("Set lock mode")
