@@ -6,5 +6,4 @@ The Adafruit Feather microcontroller and Bluefruit nRF52 bluetooth module are co
 The Raspberry Pi and SIM7600 system code are configured here. We use Python to allow the Raspberry PI to send/receive AT commands to the GPS/SMS module.
 
 The files `code.py` and `motor_control.py` should be uploaded to the Adafruit feather (which should be loaded with CircuitPython) and you should copy the Adafruit bluefruit module to the lib folder on the Feather. You can download the bluefruit module as part of the [Adafruit CircuitPython Library Bundle](https://circuitpython.org/libraries). Additionally,`sim7600.py` should be saved onto the Raspberry Pi and configured to run at startup.
-![image](https://user-images.githubusercontent.com/58480140/227580137-ba8b6314-44e6-488d-ac7f-6507bbde0c08.png)
-
+![image](https://user-images.githubusercontent.com/58480140/231600493-73fb2f92-9408-4575-b7fa-ad39930c432c.png)
