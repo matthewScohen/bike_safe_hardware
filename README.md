@@ -1,6 +1,8 @@
 # bike_safe_hardware
 Repository for all code for the microcontroller(s) for the bike safe project.
 
+Bike Safe was a project created for UF's CEN3907(8)C - Computer Engineering Design 1(2). You can see videos of the project in action [here](http://drive.google.com/file/d/1t3mQxvXF86D3jJ3va8k8QQgxi2qlvDxN/view) and [here](http://drive.google.com/file/d/1H2X12yVtx400VUr5sxwoC6RrVb-3eGYs/view)
+
 The Adafruit Feather microcontroller and Bluefruit nRF52 bluetooth module are configured here. We use CircuitPython to utilize the bluetooth module for recieving from the android app. The ADXL343 IMU is also configured here. The Adafruit feather communicates with the ADXL343 via I2C to read accelerometer data.
 
 The Raspberry Pi and SIM7600 system code are configured here. We use Python to allow the Raspberry PI to send/receive AT commands to the GPS/SMS module.
